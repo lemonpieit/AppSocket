@@ -50,12 +50,16 @@ class DSCApplication: MultiDexApplication() {
         println("Server in ascolto sulla porta $serverPort...")
 
         while (true) {
-            val clientSocket = serverSocket.accept()
-            println("Connessione accettata da ${clientSocket.inetAddress.hostAddress}")
+            var clientSocket: Socket? = null
+            clientSocket = serverSocket.accept()
 
-            // Gestisci la connessione client
-            CoroutineScope(Dispatchers.IO).launch {
-                handleClient(clientSocket)
+            if (clientSocket != null) {
+                println("Connessione accettata da ${clientSocket.inetAddress.hostAddress}")
+
+                // Gestisci la connessione client
+                CoroutineScope(Dispatchers.IO).launch {
+                    handleClient(clientSocket)
+                }
             }
         }
     }
@@ -65,10 +69,10 @@ class DSCApplication: MultiDexApplication() {
     suspend fun handleClient(clientSocket: Socket) {
         withContext(Dispatchers.IO) {
             clientSocket.use { socket ->
-                val input = socket.getInputStream().bufferedReader()
+                // val input = socket.getInputStream().bufferedReader()
                 val output = PrintWriter(socket.getOutputStream(), true)
 
-                // Leggi il comando inviato dal client
+                /*// Leggi il comando inviato dal client
                 val command = input.readLine()
                 println("Comando intero inviato al client :${command}")
 
@@ -79,6 +83,22 @@ class DSCApplication: MultiDexApplication() {
                     output.println(cmd)
                     // Simula una pausa tra l'invio di ciascun frammento
                     delay(500)
+                }*/
+
+
+                // Simula l'invio di un comando frammentato
+                val commands = listOf(
+                    "<CMD id=\"example\">",
+                    "Parte1 del comando; ",
+                    "Parte2 del comando; ",
+                    "Parte3 del comando; ",
+                    "</CMD>"
+                )
+
+                for (command in commands) {
+                    output.println(command)
+                    // Simula una pausa tra l'invio di ciascun frammento
+                    delay(500) // sostituisce Thread.sleep() in un contesto di coroutine
                 }
 
 
