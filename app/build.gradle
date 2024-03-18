@@ -1,0 +1,85 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+    // id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
+}
+
+android {
+    namespace 'com.dinema.dsc.dscserversocketsim'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.dinema.dsc.dscserversocketsim"
+        minSdk 19
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    dataBinding {
+        enabled true
+    }
+
+    viewBinding {
+        enabled true
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    // Activity, Fragment, ViewModel, LifeCycle
+    implementation "androidx.lifecycle:lifecycle-extensions:$vmodel_lifecycle_version"
+    implementation 'androidx.fragment:fragment:1.6.2'
+    kapt "androidx.lifecycle:lifecycle-compiler:$vmodel_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$vmodel_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$vmodel_lifecycle_version"
+
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$navigation_version"
+    implementation "androidx.navigation:navigation-runtime-ktx:$navigation_version"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
+    // Hilt
+    /*implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    kapt "androidx.hilt:hilt-compiler:1.2.0"*/
+
+
+    implementation 'org.simpleframework:simple-xml:2.7.1'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
