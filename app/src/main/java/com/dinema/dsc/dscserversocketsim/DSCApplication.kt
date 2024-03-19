@@ -17,14 +17,7 @@ import java.net.Socket
 
 class DSCApplication: MultiDexApplication() {
 
-    companion object {
-        internal var appContext: Context? = null
-        internal var application: Application = DSCApplication()
 
-        fun killApp(){
-            android.os.Process.killProcess(android.os.Process.myPid())
-        }
-    }
 
     override fun onCreate() {
         super.onCreate()
@@ -43,52 +36,63 @@ class DSCApplication: MultiDexApplication() {
     }
 
 
-    private fun startServerSocket() {
-        // Qui va il tuo codice server socket dal metodo main()
+    companion object {
+        internal var appContext: Context? = null
+        internal var application: Application = DSCApplication()
+        var clientSocket: Socket? = null
         val serverPort = 8080
         val serverSocket = ServerSocket(serverPort)
-        println("Server in ascolto sulla porta $serverPort...")
 
-        while (true) {
-            var clientSocket: Socket? = null
-            clientSocket = serverSocket.accept()
+        fun killApp() {
+            android.os.Process.killProcess(android.os.Process.myPid())
+        }
 
-            if (clientSocket != null) {
-                println("Connessione accettata da ${clientSocket.inetAddress.hostAddress}")
+        fun startServerSocket() {
 
-                // Gestisci la connessione client
-                CoroutineScope(Dispatchers.IO).launch {
-                    handleClient(clientSocket)
+            println("Server in ascolto sulla porta $serverPort...")
+
+            while (true) {
+
+                clientSocket = serverSocket.accept()
+
+                if (clientSocket != null) {
+                    println("Connessione accettata da ${clientSocket!!.inetAddress.hostAddress}")
+
+                    // Gestisci la connessione client
+                    /*CoroutineScope(Dispatchers.IO).launch {
+                    // handleClient(clientSocket!!)
+                    handleClient()
+                }*/
                 }
             }
         }
-    }
 
 
-    // Versione corretta di handleClient che riceve il comando dal socket
-    suspend fun handleClient(clientSocket: Socket) {
-        withContext(Dispatchers.IO) {
-            clientSocket.use { socket ->
-                val input = socket.getInputStream().bufferedReader()
-                val output = PrintWriter(socket.getOutputStream(), true)
+        // Versione corretta di handleClient che riceve il comando dal socket
+        suspend fun handleClient(/*clientSocket: Socket*/ command: String) {
+            withContext(Dispatchers.IO) {
+                clientSocket.use { socket ->
+                    // val input = socket.getInputStream().bufferedReader()
+                    val output = socket?.getOutputStream()?.let { PrintWriter(it, true) }
 
-                // Leggi il comando inviato dal client
-                val command = input.readLine()
-                println("Comando intero inviato dal client :${command}")
+                    // Leggi il comando inviato dal client
+                    /*val command = input.readLine()
+                println("Comando intero inviato dal client :${command}")*/
 
-                /*
-                // Suddividi il comando in token basati sul separatore e inviali al client
-                val commands = command.split(";")
-                println("Comando frammentato inviato al client:")
-                for (cmd in commands) {
-                    output.println(cmd)
-                    // Simula una pausa tra l'invio di ciascun frammento
-                    delay(500)
-                }*/
+                    // Suddividi il comando in token basati sul separatore e inviali al client
+                    val commands = command.split(";")
+                    println("Comando frammentato inviato al client:")
+                    for (cmd in commands) {
+                        if (output != null) {
+                            output.println(cmd)
+                        }
+                        // Simula una pausa tra l'invio di ciascun frammento
+                        delay(500)
+                    }
 
 
-                // Simula l'invio di un comando frammentato
-                val commands_01 = listOf(
+                    // Simula l'invio di un comando frammentato
+                    /*val commands_01 = listOf(
                     "<CMD id=\"example_01\">",
                     "Parte1 del comando_01; ",
                     "Parte2 del comando_01; ",
@@ -115,11 +119,12 @@ class DSCApplication: MultiDexApplication() {
                     output.println(command)
                     // Simula una pausa tra l'invio di ciascun frammento
                     // delay(100) // sostituisce Thread.sleep() in un contesto di coroutine
+                }*/
+
+                    // Chiudi la connessione
+                    // socket.close()
+
                 }
-
-                // Chiudi la connessione
-                // socket.close()
-
             }
         }
     }

@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.button_02).setOnClickListener { sendCommand("comando2;ParteA;ParteB;ParteC") }
     }
 
-    private fun sendCommand(command: String) {
+    /*private fun sendCommand(command: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val socket = Socket(serverAddress, serverPort)
@@ -31,6 +31,12 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+    }*/
+
+    private  fun sendCommand(command: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            DSCApplication.handleClient(command)
         }
     }
 }
