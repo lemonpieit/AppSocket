@@ -69,13 +69,14 @@ class DSCApplication: MultiDexApplication() {
     suspend fun handleClient(clientSocket: Socket) {
         withContext(Dispatchers.IO) {
             clientSocket.use { socket ->
-                // val input = socket.getInputStream().bufferedReader()
+                val input = socket.getInputStream().bufferedReader()
                 val output = PrintWriter(socket.getOutputStream(), true)
 
-                /*// Leggi il comando inviato dal client
+                // Leggi il comando inviato dal client
                 val command = input.readLine()
-                println("Comando intero inviato al client :${command}")
+                println("Comando intero inviato dal client :${command}")
 
+                /*
                 // Suddividi il comando in token basati sul separatore e inviali al client
                 val commands = command.split(";")
                 println("Comando frammentato inviato al client:")
@@ -87,20 +88,37 @@ class DSCApplication: MultiDexApplication() {
 
 
                 // Simula l'invio di un comando frammentato
-                val commands = listOf(
-                    "<CMD id=\"example\">",
-                    "Parte1 del comando; ",
-                    "Parte2 del comando; ",
-                    "Parte3 del comando; ",
+                val commands_01 = listOf(
+                    "<CMD id=\"example_01\">",
+                    "Parte1 del comando_01; ",
+                    "Parte2 del comando_01; ",
+                    "Parte3 del comando_01; ",
                     "</CMD>"
                 )
 
-                for (command in commands) {
+                for (command in commands_01) {
                     output.println(command)
                     // Simula una pausa tra l'invio di ciascun frammento
-                    delay(500) // sostituisce Thread.sleep() in un contesto di coroutine
+                    // delay(100) // sostituisce Thread.sleep() in un contesto di coroutine
                 }
 
+                // Simula l'invio di un comando frammentato
+                val commands_02 = listOf(
+                    "<CMD id=\"example_02\">",
+                    "Parte1 del comando_02; ",
+                    "Parte2 del comando_02; ",
+                    "Parte3 del comando_02; ",
+                    "</CMD>"
+                )
+
+                for (command in commands_02) {
+                    output.println(command)
+                    // Simula una pausa tra l'invio di ciascun frammento
+                    // delay(100) // sostituisce Thread.sleep() in un contesto di coroutine
+                }
+
+                // Chiudi la connessione
+                // socket.close()
 
             }
         }
