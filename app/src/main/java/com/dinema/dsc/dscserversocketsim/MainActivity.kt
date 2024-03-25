@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     private  fun sendCommand(command: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            DSCApplication.handleClient(command)
+            DSCApplication.clientSocket?.let { DSCApplication.handleClient(it,command) }
         }
     }
 }
