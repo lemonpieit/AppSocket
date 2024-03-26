@@ -189,17 +189,42 @@ class DSCApplication : MultiDexApplication() {
                     // open stream to send msgs to client
                     val output = PrintWriter(socket.getOutputStream(), true)
                     // var count = 0
+                    var index = 0
 
                     // Send initial command
                    /* output.println(initialCommand)
                     println("Initial command sent to client: $initialCommand")*/
 
                     try {
-                        while (true) {
+                        while (index < fragmentedCmdslist.size) {
                             // val sendsCount = "Command count: ${count++} "
                             // println("Command count sent to client: $sendsCount ")
                             // output.println(sendsCount)
-                            val commandLine = fragmentedCmdslist[Random.nextInt(0, 14)]
+                            // val commandLine = fragmentedCmdslist[Random.nextInt(0, 14)]
+                            val commandLine = fragmentedCmdslist[index++]
+                            val commands = commandLine.split(";")
+                            for (cmd in commands) {
+                                if (output != null) {
+                                    println("Comando frammentato inviato al client:$cmd ")
+                                    output.println(cmd)
+                                }
+                                // Simula una pausa tra l'invio di ciascun frammento
+                                delay(Random.nextInt(200, 2000).toLong())
+                            }
+                        }
+                    } catch (e: Exception) {
+                        println("Error or client disconnected: ${e.message}")
+                    }
+
+                    index = 0
+
+                    try {
+                        while (index < fragmentedCmdslist_02.size) {
+                            // val sendsCount = "Command count: ${count++} "
+                            // println("Command count sent to client: $sendsCount ")
+                            // output.println(sendsCount)
+                            // val commandLine = fragmentedCmdslist[Random.nextInt(0, 14)]
+                            val commandLine = fragmentedCmdslist_02[index++]
                             val commands = commandLine.split(";")
                             for (cmd in commands) {
                                 if (output != null) {
