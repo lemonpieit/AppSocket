@@ -188,17 +188,17 @@ class DSCApplication : MultiDexApplication() {
                     println("Messaggio  ricevuto dal client :${message}")
                     // open stream to send msgs to client
                     val output = PrintWriter(socket.getOutputStream(), true)
-                    var count = 0
+                    // var count = 0
 
                     // Send initial command
-                    output.println(initialCommand)
-                    println("Initial command sent to client: $initialCommand")
+                   /* output.println(initialCommand)
+                    println("Initial command sent to client: $initialCommand")*/
 
                     try {
                         while (true) {
-                            val sendsCount = "Command count: ${count++} "
-                            println("Command count sent to client: $sendsCount ")
-                            output.println(sendsCount)
+                            // val sendsCount = "Command count: ${count++} "
+                            // println("Command count sent to client: $sendsCount ")
+                            // output.println(sendsCount)
                             val commandLine = fragmentedCmdslist[Random.nextInt(0, 14)]
                             val commands = commandLine.split(";")
                             for (cmd in commands) {
